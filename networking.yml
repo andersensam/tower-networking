@@ -37,3 +37,10 @@
         msg: >-
           found interface {{ target_interface }}
           with address {{ target_address }}
+
+- name: Secondary address playbook
+  hosts: managed_hosts
+  tasks:
+    - name: Display IPv4 address
+      debug:
+        msg: "The IPv4 address for host {{ ansible_facts['hostname'] }} is: {{ ansible_facts['default_ipv4']['address'] }}"
