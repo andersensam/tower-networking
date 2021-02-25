@@ -1,45 +1,6 @@
 ---
-- hosts: 192.168.1.104
-  vars:
-    target_address: 192.168.1.104
-  tasks:
-    - set_fact:
-        target_interface: "{{ item }}"
-      when: >
-        (hostvars[inventory_hostname]['ansible_%s' % item]|default({}))
-        .get('ipv4', {}).get('address') == target_address
-        or
-        target_address in ((hostvars[inventory_hostname]['ansible_%s' % item]|default({}))
-        .get('ipv4_secondaries'))|map(attribute='address')|list
-      with_items:
-        - "{{ ansible_interfaces }}"
-
-    - debug:
-        msg: >-
-          found interface {{ target_interface }}
-          with address {{ target_address }}
-- hosts: 192.168.1.105
-  vars:
-    target_address: 192.168.1.105
-  tasks:
-    - set_fact:
-        target_interface: "{{ item }}"
-      when: >
-        (hostvars[inventory_hostname]['ansible_%s' % item]|default({}))
-        .get('ipv4', {}).get('address') == target_address
-        or
-        target_address in ((hostvars[inventory_hostname]['ansible_%s' % item]|default({}))
-        .get('ipv4_secondaries'))|map(attribute='address')|list
-      with_items:
-        - "{{ ansible_interfaces }}"
-
-    - debug:
-        msg: >-
-          found interface {{ target_interface }}
-          with address {{ target_address }}
-
-- name: Secondary address playbook
-  hosts: managed_hosts
+- name: Get networking information for managed hosts
+  hosts: all
   tasks:
     - name: Display IPv4 address
       debug:
